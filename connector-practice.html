@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Speaking Like a Connector — Practice Script</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bg: #0f1117; --surface: #1a1d27; --border: #2a2d3a;
+    --text: #e0e0e0; --muted: #8b8fa3;
+    --prospect: #ff6b6b; --connector: #4ecdc4; --connector-alt: #6c9bff;
+    --accent: #ffd93d; --green: #6bcb77;
+  }
+  body { background: var(--bg); color: var(--text); font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; line-height: 1.7; }
+
+  /* Sidebar */
+  .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 240px; background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; z-index: 100; padding: 20px 0; }
+  .sidebar h2 { color: var(--connector); font-size: 14px; text-transform: uppercase; letter-spacing: 2px; padding: 10px 20px 5px; border-top: 1px solid var(--border); margin-top: 10px; }
+  .sidebar a { display: block; padding: 8px 20px; color: var(--muted); text-decoration: none; font-size: 13px; transition: all .2s; border-left: 3px solid transparent; }
+  .sidebar a:hover { color: var(--text); background: rgba(255,255,255,.03); }
+  .sidebar a.active { color: var(--connector); border-left-color: var(--connector); background: rgba(78,205,196,.08); }
+  .sidebar .brand { padding: 15px 20px 20px; font-size: 16px; font-weight: 700; color: var(--connector); letter-spacing: -0.5px; }
+
+  /* Main */
+  .main { margin-left: 260px; padding: 40px 50px; max-width: 900px; }
+  .main h1 { font-size: 28px; margin-bottom: 8px; color: var(--connector); }
+  .main .tagline { color: var(--accent); font-weight: 600; margin-bottom: 30px; font-size: 15px; }
+
+  .scenario { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 30px; margin-bottom: 25px; scroll-margin-top: 20px; transition: border-color .3s; }
+  .scenario:hover { border-color: var(--connector); }
+
+  .prospect-q { color: var(--prospect); font-size: 18px; font-weight: 700; margin-bottom: 15px; }
+  .prospect-q::before { content: '"'; }
+  .prospect-q::after { content: '"'; }
+
+  .connector-verb { color: var(--connector); font-weight: 700; font-size: 13px; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; }
+
+  .wrong { background: rgba(255,107,107,.08); border-left: 3px solid var(--prospect); padding: 12px 18px; border-radius: 0 8px 8px 0; margin-bottom: 15px; }
+  .wrong::before { content: '✗ Don\'t say: '; color: var(--prospect); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; }
+  .wrong em { color: var(--prospect); font-style: italic; }
+
+  .right { background: rgba(78,205,196,.08); border-left: 3px solid var(--connector); padding: 15px 18px; border-radius: 0 8px 8px 0; }
+  .right::before { content: '✓ We say: '; color: var(--connector); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 4px; }
+
+  /* Sections */
+  .section-title { font-size: 22px; color: var(--connector-alt); margin: 50px 0 20px; padding-bottom: 10px; border-bottom: 2px solid var(--border); scroll-margin-top: 20px; }
+
+  .vocab-category { margin-bottom: 20px; }
+  .vocab-category h3 { color: var(--accent); font-size: 15px; margin-bottom: 8px; }
+  .vocab-list { display: flex; flex-wrap: wrap; gap: 8px; }
+  .vocab-tag { background: var(--surface); border: 1px solid var(--border); padding: 5px 14px; border-radius: 20px; font-size: 13px; color: var(--text); transition: all .2s; }
+  .vocab-tag:hover { border-color: var(--connector); color: var(--connector); }
+
+  .tips { list-style: none; counter-reset: tip; }
+  .tips li { counter-increment: tip; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 18px 20px 18px 60px; margin-bottom: 12px; position: relative; }
+  .tips li::before { content: counter(tip); position: absolute; left: 18px; top: 16px; background: var(--connector); color: var(--bg); width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; }
+  .tips li strong { color: var(--accent); }
+
+  /* Table */
+  .swap-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+  .swap-table th { background: var(--surface); color: var(--prospect); padding: 12px 16px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 2px solid var(--border); }
+  .swap-table th:last-child { color: var(--connector); }
+  .swap-table td { padding: 10px 16px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .swap-table tr:hover { background: rgba(255,255,255,.02); }
+  .swap-table td:first-child { color: var(--prospect); font-style: italic; }
+  .swap-table td:last-child { color: var(--connector); font-weight: 500; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main { margin-left: 0; padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="sidebar">
+  <div class="brand">🔗 Connector Practice</div>
+  <h2>Scenarios</h2>
+  <a href="#s1">What do you guys do?</a>
+  <a href="#s2">Isn't that just lead gen?</a>
+  <a href="#s3">How is that different?</a>
+  <a href="#s4">What does motion mean?</a>
+  <a href="#s5">Sounds expensive</a>
+  <a href="#s6">I need to know the price</a>
+  <a href="#s7">How long for results?</a>
+  <a href="#s8">What if it doesn't work?</a>
+  <a href="#s9">How do you find people?</a>
+  <a href="#s10">CRM is full of leads</a>
+  <a href="#s11">What makes you different?</a>
+  <a href="#s12">I'm interested — next?</a>
+  <h2>Reference</h2>
+  <a href="#vocab">Vocabulary</a>
+  <a href="#tips">Practice Tips</a>
+  <a href="#swaps">Vendor → Connector</a>
+</nav>
+
+<div class="main">
+
+<h1>Speaking Like a Connector</h1>
+<p class="tagline">Position: We control access and timing. We don't perform tasks.</p>
+
+<!-- Scenario 1 -->
+<div class="scenario" id="s1">
+  <div class="prospect-q">So what do you guys actually do?</div>
+  <div class="connector-verb">We position. We don't explain operations.</div>
+  <div class="wrong"><em>We help companies get leads and book appointments.</em></div>
+  <div class="right">We position companies to control the right conversations. We surface opportunities at the right moment—when signal is there, not before. We control the flow end-to-end: from signal to outcome.</div>
+</div>
+
+<!-- Scenario 2 -->
+<div class="scenario" id="s2">
+  <div class="prospect-q">But isn't that just lead generation?</div>
+  <div class="connector-verb">We reframe. We shift from operational to directional.</div>
+  <div class="wrong"><em>No, we run better campaigns.</em></div>
+  <div class="right">Not quite. We don't generate leads—that's a commodity. We create access. We put the right people in the same room. We route conversations so momentum doesn't stall. We protect your demand while we own the supply side. You don't pay for calls—you pay for motion.</div>
+</div>
+
+<!-- Scenario 3 -->
+<div class="scenario" id="s3">
+  <div class="prospect-q">How is that different from my current outreach team?</div>
+  <div class="connector-verb">We elevate. We contrast vendor vs. connector.</div>
+  <div class="wrong"><em>We're more experienced and our templates are better.</em></div>
+  <div class="right">Your team executes sequences. We control timing. They follow steps. We unlock paths. You have people who push messages. We have a system that reads signal and surfaces opportunities when timing is clean. We don't chase—we position. We don't force outcomes—we remove friction that's been sitting there.</div>
+</div>
+
+<!-- Scenario 4 -->
+<div class="scenario" id="s4">
+  <div class="prospect-q">What exactly does 'motion' mean then?</div>
+  <div class="connector-verb">We define. We use premium language as the answer.</div>
+  <div class="wrong"><em>It's just when people reply.</em></div>
+  <div class="right">Motion is real movement in the market: replies, intros, meetings, negotiations. Motion is the asset. Everything else is noise. We measure motion, not activity. We track what unlocks, not what attempts. When you have motion, you have leverage. Without it, you're just running workflows.</div>
+</div>
+
+<!-- Scenario 5 -->
+<div class="scenario" id="s5">
+  <div class="prospect-q">Sounds expensive. What's the price?</div>
+  <div class="connector-verb">We test interest. We filter demand.</div>
+  <div class="wrong"><em>It's $X per month.</em></div>
+  <div class="right">The entry point depends on upside. This only works if access opens. We're selective with who we let into this—we protect demand. The price isn't the constraint. Timing is. If timing is right, this unlocks cleanly. If not, we pause. Nothing moves without alignment.</div>
+</div>
+
+<!-- Scenario 6 -->
+<div class="scenario" id="s6">
+  <div class="prospect-q">But I need to know the price to decide.</div>
+  <div class="connector-verb">We hold frame. We don't negotiate from scarcity.</div>
+  <div class="wrong"><em>Okay, it's $5k/month.</em></div>
+  <div class="right">We can start anytime, but this runs best when timing is clean. Either this clicks, or we don't proceed. We don't pressure—we let signal decide. The question isn't whether you can afford it. It's whether this unlocks anything for you. If the upside is obvious, the conversation continues. If not, no rush—we'll figure it out later.</div>
+</div>
+
+<!-- Scenario 7 -->
+<div class="scenario" id="s7">
+  <div class="prospect-q">How long before I see results?</div>
+  <div class="connector-verb">We position. We don't promise dates.</div>
+  <div class="wrong"><em>Usually 2-3 weeks.</em></div>
+  <div class="right">Things start moving once this unlocks. We don't promise dates because we don't control the market—you do. We control access and routing. Once we surface conversations at the right moment, the pattern repeats. Momentum builds. You'll know pretty quickly if this fits—usually within the first few introductions.</div>
+</div>
+
+<!-- Scenario 8 -->
+<div class="scenario" id="s8">
+  <div class="prospect-q">What if it doesn't work?</div>
+  <div class="connector-verb">We remove risk. We frame as testing fit.</div>
+  <div class="wrong"><em>We'll keep trying until it works.</em></div>
+  <div class="right">If this moves, it moves cleanly. If not, we pause. There's no pressure here. This is already mapped. We step in when momentum stalls, but we don't force outcomes. We test for signal first. If signal is there, we route. If not, we wait. We don't chase conversations that don't exist.</div>
+</div>
+
+<!-- Scenario 9 -->
+<div class="scenario" id="s9">
+  <div class="prospect-q">How do you guys find people to contact?</div>
+  <div class="connector-verb">We redirect. We don't explain tactics.</div>
+  <div class="wrong"><em>We use LinkedIn Sales Navigator and Apollo.</em></div>
+  <div class="right">We surface conversations at the right moment. We don't chase—we position. We route based on signal, not lists. The way we usually run this is we read the market, identify demand, and unlock access. We control the flow end-to-end. The question is whether this pattern fits what you're trying to build.</div>
+</div>
+
+<!-- Scenario 10 -->
+<div class="scenario" id="s10">
+  <div class="prospect-q">But my CRM is full of leads. Why do I need you?</div>
+  <div class="connector-verb">We contrast. We differentiate from tools.</div>
+  <div class="wrong"><em>Our system is better than your CRM.</em></div>
+  <div class="right">You have contacts. We have access. You have tools. We have signal. Your CRM stores people. We put them in motion. Nothing moves without alignment—you have the database, but do you have the routing? We control timing and positioning. That's what clients pay for: access to motion.</div>
+</div>
+
+<!-- Scenario 11 -->
+<div class="scenario" id="s11">
+  <div class="prospect-q">What makes you different from everyone else?</div>
+  <div class="connector-verb">We crystallize. We synthesize the connector identity.</div>
+  <div class="wrong"><em>We're more responsive and smarter.</em></div>
+  <div class="right">We don't sell—we offer access. We don't chase—we position. We don't execute sequences—we control flow. We step in when momentum stalls. We remove friction. We protect demand. We own timing. We surface conversations at the right moment. We route outcomes. We don't generate leads—we unlock motion.<br><br>Everything else is just labor. We're the connector.</div>
+</div>
+
+<!-- Scenario 12 -->
+<div class="scenario" id="s12">
+  <div class="prospect-q">Okay, I'm interested. What's next?</div>
+  <div class="connector-verb">We test commitment. We don't rush.</div>
+  <div class="wrong"><em>Let's schedule a call tomorrow.</em></div>
+  <div class="right">This only works under a specific condition: timing. We're selective with who we let into this. Does this sound like it could unlock anything for you? If the upside is obvious, let's move forward. If not, there's no rush—we can revisit when timing is clean. Either this clicks, or we pause.</div>
+</div>
+
+<!-- Vocabulary -->
+<h2 class="section-title" id="vocab">Premium Vocabulary Checklist</h2>
+
+<div class="vocab-category">
+  <h3>Status & Positioning</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">position / positioning</span>
+    <span class="vocab-tag">access / access point</span>
+    <span class="vocab-tag">control / control the flow</span>
+    <span class="vocab-tag">selective / who we let into this</span>
+    <span class="vocab-tag">protect demand</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>Movement & Signal</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">motion / real movement</span>
+    <span class="vocab-tag">signal / read signal</span>
+    <span class="vocab-tag">momentum</span>
+    <span class="vocab-tag">path / unlock paths</span>
+    <span class="vocab-tag">timing edge</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>Outcomes & Leverage</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">outcomes / unlock outcomes</span>
+    <span class="vocab-tag">leverage</span>
+    <span class="vocab-tag">upside</span>
+    <span class="vocab-tag">friction / remove friction</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>System & Flow</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">routing</span>
+    <span class="vocab-tag">alignment</span>
+    <span class="vocab-tag">flow / end-to-end</span>
+    <span class="vocab-tag">pattern / this pattern repeats</span>
+    <span class="vocab-tag">map / already mapped</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>Decision & Timing</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">timing / timing is clean</span>
+    <span class="vocab-tag">condition</span>
+    <span class="vocab-tag">pause</span>
+    <span class="vocab-tag">rush / no rush</span>
+    <span class="vocab-tag">obvious / upside is obvious</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>Exchange & Value</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">demand / demand is sacred</span>
+    <span class="vocab-tag">supply / replaceable</span>
+    <span class="vocab-tag">intro / controlled release</span>
+    <span class="vocab-tag">conversation</span>
+    <span class="vocab-tag">unlock</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>Qualifiers</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">clean</span>
+    <span class="vocab-tag">moves cleanly</span>
+    <span class="vocab-tag">fits</span>
+    <span class="vocab-tag">clicks</span>
+    <span class="vocab-tag">obvious</span>
+  </div>
+</div>
+
+<div class="vocab-category">
+  <h3>Connector Identity</h3>
+  <div class="vocab-list">
+    <span class="vocab-tag">not selling — offering access</span>
+    <span class="vocab-tag">not chasing — positioning</span>
+    <span class="vocab-tag">not executing — controlling</span>
+    <span class="vocab-tag">not generating leads — unlocking motion</span>
+  </div>
+</div>
+
+<!-- Practice Tips -->
+<h2 class="section-title" id="tips">Practice Tips</h2>
+<ol class="tips">
+  <li><strong>Speak slowly.</strong> Each phrase carries weight. Don't rush through it.</li>
+  <li><strong>Pause after bold statements.</strong> Let the power land.</li>
+  <li><strong>Emphasize directional words:</strong> position, control, unlock, surface, route, protect.</li>
+  <li><strong>De-emphasize operational words:</strong> help, run, do, make, get.</li>
+  <li><strong>Maintain calm conviction.</strong> You're not convincing—you're stating how it is.</li>
+  <li><strong>End with a question that tests fit:</strong> "Does this unlock anything for you?" "Is timing clean?"</li>
+</ol>
+
+<!-- Swap Table -->
+<h2 class="section-title" id="swaps">Vendor → Connector Swaps</h2>
+<table class="swap-table">
+  <thead><tr><th>✗ Vendor Language</th><th>✓ Connector Language</th></tr></thead>
+  <tbody>
+    <tr><td>leads</td><td>conversations / intros</td></tr>
+    <tr><td>appointments</td><td>access</td></tr>
+    <tr><td>outreach</td><td>positioning</td></tr>
+    <tr><td>campaigns</td><td>motion</td></tr>
+    <tr><td>workflows</td><td>routing</td></tr>
+    <tr><td>tools</td><td>signal</td></tr>
+    <tr><td>results</td><td>outcomes, ROI</td></tr>
+    <tr><td>service</td><td>access point</td></tr>
+    <tr><td>I book meetings</td><td>I put the right people in the same room</td></tr>
+    <tr><td>I run cold email</td><td>I surface conversations at the right moment</td></tr>
+    <tr><td>I help companies</td><td>I step in when momentum stalls</td></tr>
+    <tr><td>our service</td><td>the way we usually run this</td></tr>
+    <tr><td>we work with clients</td><td>I'm selective with who I let into this</td></tr>
+    <tr><td>we generate opportunities</td><td>things start moving once this unlocks</td></tr>
+    <tr><td>we create results</td><td>this removes friction that's been sitting there</td></tr>
+    <tr><td>you'll get more leads</td><td>this only works under a specific condition</td></tr>
+    <tr><td>if you want</td><td>if timing is right</td></tr>
+    <tr><td>no pressure</td><td>there's no rush here</td></tr>
+    <tr><td>we'll figure it out</td><td>this is already mapped</td></tr>
+    <tr><td>trust us</td><td>this pattern repeats</td></tr>
+    <tr><td>does that sound good</td><td>you'll know pretty quickly if this fits</td></tr>
+    <tr><td>what do you think?</td><td>question is whether this unlocks anything for you</td></tr>
+    <tr><td>should we proceed</td><td>if this moves, it moves cleanly</td></tr>
+    <tr><td>we have availability</td><td>we don't open this often</td></tr>
+    <tr><td>we can start anytime</td><td>this runs best when timing is clean</td></tr>
+    <tr><td>let's move forward</td><td>either this clicks, or we pause</td></tr>
+    <tr><td>the price is</td><td>the entry point is</td></tr>
+    <tr><td>is that in your budget?</td><td>this is only relevant if the upside is obvious</td></tr>
+    <tr><td>you're paying for</td><td>this only makes sense if access opens</td></tr>
+    <tr><td>we handle everything</td><td>nothing moves without alignment</td></tr>
+    <tr><td>first we do...</td><td>this sequence matters here...</td></tr>
+    <tr><td>we manage the process</td><td>we control the flow end-to-end</td></tr>
+    <tr><td>let me explain how it works</td><td>here's what tends to happen</td></tr>
+  </tbody>
+</table>
+
+<p style="margin-top:40px; padding:20px; background:var(--surface); border-radius:10px; text-align:center; color:var(--muted); font-size:14px;">
+  <strong style="color:var(--connector);">Repeat daily.</strong> Internalize the frame. You don't chase—you position. You don't execute—you control. You're not a vendor—you're a <strong style="color:var(--accent);">connector</strong>.
+</p>
+
+</div>
+
+<script>
+// Active sidebar link on scroll
+const sections = document.querySelectorAll('.scenario, .section-title');
+const links = document.querySelectorAll('.sidebar a');
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      links.forEach(l => l.classList.remove('active'));
+      const id = entry.target.id;
+      const link = document.querySelector(`.sidebar a[href="#${id}"]`);
+      if (link) link.classList.add('active');
+    }
+  });
+}, { rootMargin: '-20% 0px -60% 0px' });
+
+sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
